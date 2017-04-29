@@ -21,11 +21,11 @@ trait ModelSelfRelation
     /**
      * parent
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function parent()
     {
-        return static::where($this->getKeyName(), $this->getParentId());
+        return $this->belongsTo(static::class, $this->getParentColumn());
     }
 
     /**
@@ -44,13 +44,11 @@ trait ModelSelfRelation
     /**
      * childs
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function childs()
     {
-        $parentColumn = $this->getParentColumn();
-
-        return static::where($parentColumn, $this->id);
+        return $this->hasMany(static::class, $this->getParentColumn());
     }
 
     /**
@@ -73,7 +71,7 @@ trait ModelSelfRelation
      */
     public function hasParent()
     {
-        return !empty($this->parent());
+        return !empty($this->parent()->first());
     }
 
     /**
@@ -98,7 +96,7 @@ trait ModelSelfRelation
 
         while ($model->hasParent()) {
             $level++;
-            $model = $model->parent();
+            $model = $model->parent()->first();
         }
 
         return $level;
