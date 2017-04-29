@@ -21,34 +21,30 @@ trait ModelSelfRelation
     /**
      * parent
      *
-     * @return App\Model | null
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function parent()
     {
-        if ($parent_id = $this->getParentId()) {
-            return static::find($parent_id);
-        }
-
-        return null;
+        return static::where($this->getKeyName(), $this->getParentId());
     }
 
     /**
      * getParentAttribute - Eloquent attribute accessor.
      *
      * @param  mix $value
-     * @return void
+     * @return \App\Model | null
      */
     public function getParentAttribute($value)
     {
         if (!$value) {
-            return $this->parent();
+            return $this->parent()->first();
         }
     }
 
     /**
      * childs
      *
-     * @return \Illuminate\Database\Query\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function childs()
     {
@@ -61,7 +57,7 @@ trait ModelSelfRelation
      * getChildsAttribute - Eloquent attribute accessor.
      *
      * @param  mix $value
-     * @return void
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getChildsAttribute($value)
     {
@@ -111,8 +107,8 @@ trait ModelSelfRelation
     /**
      * scopeSurface - local scope, The rows that doesn't have parent_id.
      *
-     * @param  \Illuminate\Database\Query\Builder $query
-     * @return \Illuminate\Database\Query\Builder
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeSurface($query)
     {

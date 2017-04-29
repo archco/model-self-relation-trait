@@ -1,1 +1,3 @@
-self relationship for laravel eloquent
+# ModelSelfRelation trait
+
+The trait for self relationship in laravel eloquent.
