@@ -2,6 +2,12 @@
 
 namespace App\Support\Traits;
 
+/**
+ * The trait for self relationship for an eloquent model.
+ *
+ * @link https://github.com/archco/model-self-relation-trait
+ * @version 1.0.0
+ */
 trait ModelSelfRelation
 {
     // protected $selfReferenceColumn = 'parent_id';
@@ -42,25 +48,25 @@ trait ModelSelfRelation
     }
 
     /**
-     * childs
+     * children
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function childs()
+    public function children()
     {
         return $this->hasMany(static::class, $this->getParentColumn());
     }
 
     /**
-     * getChildsAttribute - Eloquent attribute accessor.
+     * getChildrenAttribute - Eloquent attribute accessor.
      *
      * @param  mix $value
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getChildsAttribute($value)
+    public function getChildrenAttribute($value)
     {
         if (!$value) {
-            return $this->childs()->get();
+            return $this->children()->get();
         }
     }
 
@@ -81,7 +87,7 @@ trait ModelSelfRelation
      */
     public function hasChild()
     {
-        return $this->childs()->count() > 0;
+        return $this->children()->count() > 0;
     }
 
     /**
